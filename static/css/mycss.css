@@ -1,0 +1,76 @@
+div.jumbotron {
+    width: 900px;
+    margin: auto;
+  }
+
+  div.card-columns{
+    width: 900px;
+    margin: 10px auto 0 auto;
+  }
+
+  div.form-post {
+   max-width: 500px;
+   padding: 2rem;
+   margin: 2rem auto;
+   border-color: #e9ecef;
+   border-radius: 0.3rem;
+   border: solid;
+ }
+
+  .radio-inline{
+    text-align: right;
+  }
+
+ .comment {
+   color: blue;
+   font-weight: bold;
+ }
+
+ #posting-box{
+  display: none;
+ }
+
+ .radio-inline{
+    text-align: right;
+  }
+
+  input{
+
+    background-color: white;
+    width: 50%;
+    text-align: center;
+    margin-top: auto;
+    margin-right: auto;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    padding: auto;
+
+  }
+
+  img {
+    border-radius: 10%;
+  }
+
+
+  form-group{
+    display: inline-block;
+    float: left;
+  }
+
+
+  span.c {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    padding: auto;
+    border: 1px solid blue;
+    background-color: yellow;
+    text-align: center
+
+  }
+
+
+ button {
+    position: fixed;
+
+  }

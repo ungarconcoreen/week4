@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+  <!-- JS -->   
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <!-- test.css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mycss.css') }}">
+
+<script>
+  
+  
+  function make_card(name, address){
+
+    var temp_html =  '<div class="card">\
+        <img class="card-img-top" src="https://www.fodors.com/wp-content/uploads/2018/10/4_UltimateRome_PiazzaNavona-975x650.jpg" alt="Card image cap">\
+        <div class="card-body">\
+          <a class="card-title" target="_blank" href="'+name+'">purchaser-name!</a>\
+          <p class="card-text"> purchase-info ! </p>\
+          <p class="card-text address">'+address+'</p>\
+        </div>\
+      </div>\
+    </div>';
+
+    $('#cards-box').append(temp_html)
+  }
+
+  function purchase() {
+    // 읽기
+    let name = $('#purchase-name').val();
+    let address = $('#purchase-address').val();
+    let state = $('#purchase-state').val();
+
+    $.ajax({
+      type: "POST", // POST 방식으로 요청하겠다.
+      url: "/purchase", // /purchase라는 url에 요청하겠다.
+      data: { name_give: name, address_give: address, state_give: state} // 데이터를 주는 방법
+      success: function(result){ // 성공하면
+        if (result['result'] == 'success'){
+          alert('주문 성공!');
+          window.location.reload();
+        } else{
+          alert('Purchase Fail :P ');
+        }
+      }
+    })
+  }
+
+  function get_purchase() {
+   $('#cards-box').empty('');
+   $.ajax({
+      type: "GET",
+      url: "/post",
+      data: {},
+      success: function(response){
+        var cards = response['purchases'];
+
+        for (let i=0; i < cards.length; i++){
+
+          var name = cards[i]['name'];
+          var address = cards[i]['address']
+
+          make_card(name,address);
+        }
+      }
+    })  
+  }
+
+  window.onload=function(){
+    get_purchase();
+  }
+
+</script>
+  <title>Week3_shop</title>
+</head>
+
+<body>
+  <div class="jumbotron">
+    <h1 class="display-3"> No-Cut Slacks </h1>
+    <p class= "lead"> Ultimate Summer Daily Pants </p>
+    <hr class="my-2">
+    <br>
+    <img  src="{{ url_for('static', filename='img/쇼핑몰.gif') }}" alt="" width="300" height="300" border="10px">
+
+    <p> 
+      <ul> 
+        <li> 1 waist size for two length </li>
+        <li> extreme stretchable</li>
+        <li> slim baggy fit</li>
+      </ul> 
+    </p>
+
+    <!-- emjoi -->
+    <a href="https://www.youtube.com/watch?v=Vq9uLdl6BMY" target="_blank"> <p style="font-size:50px">&#x1F4F9;</p> </a>
+  </div>
+
+  <!-- card columns / column-->
+  <div class="card-columns">
+    <h2 class="display-4"> Order </h2>
+  </div>
+
+  <div class="card-columns">
+    <p style="font-size: 15px; color:black"> <strong> No-Cut Slacks </strong><br>
+    <span style="color:gray" ;font-weight: bold;font-size:15px;> 가격 89,000원 / pcs</span>
+    </p> 
+  </div>
+
+<!-- label - display inline block. width input/ /table / float right -->
+  <div id="purchase-box" class="form-purchase">
+    <form>
+      <div class="form-customer"> 
+        <label class="radio-inline">
+        <input id="purchase-size" type="radio" name="size" id="purchase-size"> S
+      </label>
+        <label class="radio-inline">
+        <input id="purchase-size" type="radio" name="size" id="purchase-size"> M
+      </label>
+        <label class="radio-inline">
+        <input id="purchase-size" type="radio" name="size" id="purchase-size"> L
+      </label> 
+      <div class="form-customer"> 
+       <label for="exampleFormControlInput1"> Name </label> 
+       <input id="purchase-name" class="form-purchase" placeholder="Name">
+      </div>
+      <div class="form-customer"> 
+       <label for="exampleFormControlInput1"> Address </label>
+       <input id="purchase-address" class="form-purchase" placeholder="Address">
+      </div>
+    <!-- <select class="custom-select d-block w-50" id="state" required=""> -->
+      <div class="form-customer"> 
+        <label for="state">State</label>
+          <select class="select" id="purchase-state" required="">
+            <option value="">Choose...</option>
+            <option>Gangnam</option>
+            <option>California</option>
+            <option>Paris</option> </select>
+      </div>
+      <button class="btn btn-primary btn-lg btn-block" type="submit" onclick="purchase()"> Purchase
+      </button>
+    </form>
+  </div>
+
+  <div id="cards-box" class="card-columns card-post">
+    <div class="card">
+      <img class="card-img-top" src="https://www.fodors.com/wp-content/uploads/2018/10/4_UltimateRome_PiazzaNavona-975x650.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">card appears like this!</h5>
+        <p class="card-text">purchase info</p>
+        <p class="card-text comment">address info</p>
+      </div>
+  </div>
+
+</body>
+</html>
